@@ -2,8 +2,9 @@ TASK_FILE = "tasks.txt"
 
 def load_tasks():
     try:
-        with open(TASK_FILE, "r") as file:
-            return file.read().splitlines()
+        with open(TASK_FILE, "r", encoding="utf-8") as file:
+            tasks  = file.read().splitlines()
+            return tasks
 
     except FileNotFoundError:
         return []
