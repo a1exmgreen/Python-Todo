@@ -1,27 +1,28 @@
 TASK_FILE = "tasks.txt"
+ARCHIVE_FILE = "archived_tasks.txt"
 
-def load_tasks():
+
+def load_task_file(filename):
     tasks = []
 
     try:
-        with open(TASK_FILE, "r", encoding="utf-8") as file:
+        with open(filename, "r", encoding="utf-8") as file:
             for line in file:
                 line = line.strip()
 
-                # Ignore  empty lines
                 if not line:
                     continue
 
-                # Load tasks saved in the file
+                # New format: completion status followed by task text
                 if "|" in line:
-                    completed_value, task_test = line.split("|", 1)
+                    completed_value, task_text = line.split("|", 1)
 
                     task = {
-                        "text": task_test,
+                        "text": task_text,
                         "completed": completed_value == "1"
                     }
 
-                # Load older tasks as incomplete
+                # Older plain-text tasks are loaded as incomplete
                 else:
                     task = {
                         "text": line,
@@ -35,8 +36,9 @@ def load_tasks():
 
     return tasks
 
-def save_tasks(tasks):
-    with open(TASK_FILE, "w", encoding="utf-8") as file:
+
+def save_task_file(filename, tasks):
+    with open(filename, "w", encoding="utf-8") as file:
         for task in tasks:
             if task["completed"]:
                 completed_value = "1"
@@ -46,3 +48,19 @@ def save_tasks(tasks):
             file.write(
                 f"{completed_value}|{task['text']}\n"
             )
+
+
+def load_tasks():
+    return load_task_file(TASK_FILE)
+
+
+def save_tasks(tasks):
+    save_task_file(TASK_FILE, tasks)
+
+
+def load_archived_tasks():
+    return load_task_file(ARCHIVE_FILE)
+
+
+def save_archived_tasks(tasks):
+    save_task_file(ARCHIVE_FILE, tasks)
