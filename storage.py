@@ -36,7 +36,7 @@ def load_tasks():
     return tasks
 
 def save_tasks(tasks):
-    with open(TASK_FILE, "w", ecoding="utf-8") as file:
+    with open(TASK_FILE, "w", encoding="utf-8") as file:
         for task in tasks:
             if task["completed"]:
                 completed_value = "1"
