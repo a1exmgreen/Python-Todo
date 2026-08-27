@@ -14,11 +14,11 @@ The project is being developed as a practical learning exercise to practise:
 - Task list
 - Task checkboxes
 - Seperate modules for the sidebar and tasks
-
-# Planned features
 - Add new tasks
 - Save tasks between sessions
 - Mark tasks as completed
+
+# Planned features
 - Delete and edit tasks
 - Tasks due dates
 - Task priorities
