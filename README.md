@@ -1,4 +1,4 @@
-# Python Tkinter To-Do App
+# Python tkinter todo app
 A desktop application built with Python and Tkinter.
 
 The project is being developed as a practical learning exercise to practise:
@@ -8,7 +8,7 @@ The project is being developed as a practical learning exercise to practise:
 - File storage
 - Git and Github
 
-# Current Features
+# Current features
 - Sidebar navigation
 - Today's date
 - Task list
@@ -23,6 +23,8 @@ The project is being developed as a practical learning exercise to practise:
 - Tasks due dates
 - Task priorities
 - Routines, events and checklists
+
+# UI redesign
 
 # Running the application
 Make sure Python is installed, then run:
