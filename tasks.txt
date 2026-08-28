@@ -1,7 +1,7 @@
-Finish to-do app
-Start working on the buy app
-Pluralsight daily task
-Look at starting the CMP
-Speak to Hanna @ Unrvld
-Add delete/edit option to this app
-Automate Navigation Updates
+0|Finish to-do app
+0|Start working on the buy app
+0|Pluralsight daily task
+0|Look at starting the CMP
+0|Speak to Hanna @ Unrvld
+0|Add delete/edit option to this app
+0|Automate Navigation Updates

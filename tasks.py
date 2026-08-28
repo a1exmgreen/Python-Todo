@@ -1,5 +1,8 @@
 import tkinter as tk
 from tkinter import messagebox, simpledialog
+import customtkinter as ctk
+
+from theme import COLORS
 
 from storage import (
     load_tasks,
@@ -24,6 +27,27 @@ def create_task_manager(parent, title_label):
 
         title_label.config(text="Today's Tasks")
         clear_task_area()
+
+        completed_count = sum(
+            1 for task in tasks if task["completed"]
+        )
+
+        remaining_count = len(tasks) - completed_count
+
+        counter_label = ctk.CTkLabel(
+            parent,
+            text=f"{remaining_count} remaining • {completed_count} completed",
+            font=ctk.CTkFont(
+                family="Segoe UI",
+                size=12
+            ),
+            text_color=COLORS["text_secondary"]
+        )
+
+        counter_label.pack(
+            anchor="w",
+            pady=(0, 10)
+        )
 
         if not tasks:
             empty_label = tk.Label(
