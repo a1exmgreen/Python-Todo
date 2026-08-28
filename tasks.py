@@ -78,13 +78,23 @@ def create_task_manager(parent, title_label):
                 value=task["completed"]
             )
 
+            if task["completed"]:
+                task_font = ("Segoe UI", 11, "overstrike")
+                task_colour = COLORS["text_secondary"]
+            else:
+                task_font = ("Segoe UI", 11)
+                task_colour = COLORS["text"]
+
             checkbox = tk.Checkbutton(
                 task_row,
                 text=task["text"],
                 variable=completed_variable,
-                font=("Arial", 11),
+                font=task_font,
+                fg=task_colour,
                 bg="#F8F7F4",
                 activebackground="#F8F7F4",
+                activeforeground=task_colour,
+                selectcolor="#F8F7F4",
                 command=lambda task_index=index,
                 variable=completed_variable:
                 update_task_completion(task_index, variable)
@@ -199,6 +209,7 @@ def create_task_manager(parent, title_label):
 
         tasks[task_index]["completed"] = completed_variable.get()
         save_tasks(tasks)
+        show_active_tasks()
 
     def add_task():
         """Ask the user for a task and add it to the active list."""
