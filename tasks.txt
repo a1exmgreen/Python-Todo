@@ -4,4 +4,4 @@
 0|Look at starting the CMP
 1|Speak to Hanna @ Unrvld
 0|Add delete/edit option to this app
-0|Automate Navigation Updates
+1|Automate Navigation Updates

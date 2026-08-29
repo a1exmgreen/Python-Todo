@@ -21,5 +21,7 @@ COLORS = {
     "text": "#111827",
     "text_secondary": "#6B7280",
 
-    "border": "#E5E7EB"
+    "border": "#E5E7EB",
+
+    "success_hover": "#15803D"
 }

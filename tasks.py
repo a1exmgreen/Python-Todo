@@ -25,7 +25,7 @@ def create_task_manager(parent, title_label):
     def show_active_tasks():
         """Display all active tasks."""
 
-        title_label.config(text="Today's Tasks")
+        title_label.configure(text="Today's Tasks")
         clear_task_area()
 
         completed_count = sum(
@@ -50,12 +50,13 @@ def create_task_manager(parent, title_label):
         )
 
         if not tasks:
-            empty_label = tk.Label(
+            empty_label = ctk.CTkLabel(
                 parent,
-                text="No active tasks. Please add one.",
-                font=("Arial", 11),
-                bg="#F8F7F4",
-                fg="#666666"
+                text="No active tasks. Add your first task to get started.",
+                font=ctk.CTkFont(
+                    family="Segoe UI",
+                    size=14
+                ),
             )
             empty_label.pack(
                 anchor="w",
@@ -136,7 +137,7 @@ def create_task_manager(parent, title_label):
     def show_archived_tasks():
         """Display all archived tasks."""
 
-        title_label.config(text="Archived Tasks")
+        title_label.configure(text="Archived Tasks")
         clear_task_area()
 
         if not archived_tasks:
