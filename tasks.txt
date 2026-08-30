@@ -2,6 +2,4 @@
 0|Start working on the buy app
 0|Pluralsight daily task
 0|Look at starting the CMP
-1|Speak to Hanna @ Unrvld
 0|Add delete/edit option to this app
-1|Automate Navigation Updates

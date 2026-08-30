@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox, simpledialog
+
 import customtkinter as ctk
 
 from theme import COLORS
@@ -11,13 +12,12 @@ from storage import (
     save_archived_tasks
 )
 
-
 def create_task_manager(parent, title_label):
     tasks = load_tasks()
     archived_tasks = load_archived_tasks()
 
     def clear_task_area():
-        """Remove the widgets currently displayed in the task area."""
+        """Remove all widgets currently displayed in the task area."""
 
         for widget in parent.winfo_children():
             widget.destroy()
@@ -28,15 +28,20 @@ def create_task_manager(parent, title_label):
         title_label.configure(text="Today's Tasks")
         clear_task_area()
 
+        # Count completed and remaining tasks
         completed_count = sum(
             1 for task in tasks if task["completed"]
         )
 
         remaining_count = len(tasks) - completed_count
 
+        # Display the task counter
         counter_label = ctk.CTkLabel(
             parent,
-            text=f"{remaining_count} remaining • {completed_count} completed",
+            text=(
+                f"{remaining_count} remaining"
+                f" • {completed_count} completed"
+            ),
             font=ctk.CTkFont(
                 family="Segoe UI",
                 size=12
@@ -49,89 +54,147 @@ def create_task_manager(parent, title_label):
             pady=(0, 10)
         )
 
+        # Display an empty-state message
         if not tasks:
             empty_label = ctk.CTkLabel(
                 parent,
-                text="No active tasks. Add your first task to get started.",
+                text=(
+                    "No active tasks."
+                    "Add your first task to get started."
+                ),
                 font=ctk.CTkFont(
                     family="Segoe UI",
                     size=14
                 ),
+                text_color=COLORS["text_secondary"]
             )
+
             empty_label.pack(
                 anchor="w",
-                pady=5
+                pady=10
             )
+
             return
 
+        # Create a modern card for every active task
         for index, task in enumerate(tasks):
-            task_row = tk.Frame(
+            task_card = ctk.CTkFrame(
                 parent,
-                bg="#F8F7F4"
-            )
-            task_row.pack(
-                fill="x",
-                anchor="w",
-                pady=5
+                height=68,
+                corner_radius=14,
+                fg_color=COLORS["card"],
+                border_width=1,
+                border_color=COLORS["border"]
             )
 
+            task_card.pack(
+                fill="x",
+                pady=6,
+                padx=(0, 5)
+            )
+
+            # Keep every card at a consistant height
+            task_card.pack_propagate(False)
+
+            # Store the checkbox state
             completed_variable = tk.BooleanVar(
                 value=task["completed"]
             )
 
+            # Style completed and incomplete tasks differently
             if task["completed"]:
-                task_font = ("Segoe UI", 11, "overstrike")
+                task_font = ctk.CTkFont(
+                    family="Segoe UI",
+                    size=14,
+                    overstrike=True
+                )
+
                 task_colour = COLORS["text_secondary"]
+
             else:
-                task_font = ("Segoe UI", 11)
+                task_font = ctk.CTkFont(
+                    family="Segoe UI",
+                    size=14
+                )
+
                 task_colour = COLORS["text"]
 
-            checkbox = tk.Checkbutton(
-                task_row,
+            # Modern task checkbox
+            checkbox = ctk.CTkCheckBox(
+                task_card,
                 text=task["text"],
                 variable=completed_variable,
                 font=task_font,
-                fg=task_colour,
-                bg="#F8F7F4",
-                activebackground="#F8F7F4",
-                activeforeground=task_colour,
-                selectcolor="#F8F7F4",
+                text_color=task_colour,
+                checkbox_width=22,
+                checkbox_height=22,
+                corner_radius=6,
+                border_width=2,
+                fg_color=COLORS["primary"],
+                hover_color=COLORS["primary_hover"],
+                border_color=COLORS["text_secondary"],
                 command=lambda task_index=index,
                 variable=completed_variable:
-                update_task_completion(task_index, variable)
-            )
-            checkbox.pack(
-                side="left"
+                update_task_completion(
+                    task_index,
+                    variable
+                )
             )
 
-            delete_button = tk.Button(
-                task_row,
+            checkbox.pack(
+                side="left",
+                fill="x",
+                expand=True,
+                padx=(18, 10),
+                pady=15
+            )
+
+            # Delete button
+            delete_button = ctk.CTkButton(
+                task_card,
                 text="Delete",
-                font=("Arial", 9),
-                bg="#E8A0A0",
-                activebackground="#D78484",
-                cursor="hand2",
+                width=76,
+                height=34,
+                corner_radius=9,
+                font=ctk.CTkFont(
+                    family="Segoe UI",
+                    size=12,
+                    weight="bold"
+                ),
+                fg_color=COLORS["delete"],
+                hover_color=COLORS["delete_hover"],
                 command=lambda task_index=index:
                 delete_task(task_index)
             )
+
             delete_button.pack(
                 side="right",
-                padx=(5, 0)
+                padx=(5, 14),
+                pady=15
             )
 
-            archive_button = tk.Button(
-                task_row,
+            # Archive button
+            archive_button = ctk.CTkButton(
+                task_card,
                 text="Archive",
-                font=("Arial", 9),
-                bg="#D8C7EC",
-                activebackground="#C4ADDE",
-                cursor="hand2",
+                width=82,
+                height=34,
+                corner_radius=9,
+                font=ctk.CTkFont(
+                    family="Segoe UI",
+                    size=12,
+                    weight="bold"
+                ),
+                fg_color=COLORS["archive"],
+                hover_color=COLORS["archive_hover"],
                 command=lambda task_index=index:
                 archive_task(task_index)
             )
+
             archive_button.pack(
                 side="right",
-                padx=(15, 0)
+                padx=5,
+                pady=15
             )
 
     def show_archived_tasks():
@@ -140,76 +203,142 @@ def create_task_manager(parent, title_label):
         title_label.configure(text="Archived Tasks")
         clear_task_area()
 
+        # Display the archived task counter
+        archived_count_label = ctk.CTkLabel(
+            parent,
+            text=f"{len(archived_tasks)} archived",
+            font=ctk.CTkFont(
+                family="Segoe UI",
+                size=12
+            ),
+            text_color=COLORS["text_secondary"]
+        )
+
+        archived_count_label.pack(
+            anchor="w",
+            pady=(0, 10)
+        )
+
+        # Display an empty-state message
         if not archived_tasks:
-            empty_label = tk.Label(
+            empty_label = ctk.CTkLabel(
                 parent,
                 text="There are no archived tasks.",
-                font=("Arial", 11),
-                bg="#F8F7F4",
-                fg="#666666"
+                font=ctk.CTkFont(
+                    family="Segoe UI",
+                    size=14
+                ),
+                text_color=COLORS["text_secondary"]
             )
+
             empty_label.pack(
                 anchor="w",
-                pady=5
+                pady=10
             )
+
             return
 
+        # Create a modern card for every archived task
         for index, task in enumerate(archived_tasks):
-            task_row = tk.Frame(
+            archived_card = ctk.CTkFrame(
                 parent,
-                bg="#F8F7F4"
+                height=68,
+                corner_radius=14,
+                fg_color=COLORS["card"],
+                border_width=1,
+                border_color=COLORS["border"]
             )
-            task_row.pack(
+
+            archived_card.pack(
                 fill="x",
-                anchor="w",
-                pady=5
+                pady=6,
+                padx=(0, 5)
             )
 
-            task_label = tk.Label(
-                task_row,
+            # Keep every archived card at a consistent height
+            archived_card.pack_propagate(False)
+
+            # Archived task name
+            task_label = ctk.CTkLabel(
+                archived_card,
                 text=task["text"],
-                font=("Arial", 11),
-                bg="#F8F7F4"
-            )
-            task_label.pack(
-                side="left"
+                font=ctk.CTkFont(
+                    family="Segoe UI",
+                    size=14
+                ),
+                text_color=COLORS["text"],
+                anchor="w"
             )
 
-            delete_button = tk.Button(
-                task_row,
+            task_label.pack(
+                side="left",
+                fill="x",
+                expand=True,
+                padx=(18, 10),
+                pady=15
+            )
+
+            # Permanetly delete archived task
+            delete_button = ctk.CTkButton(
+                archived_card,
                 text="Delete",
-                font=("Arial", 9),
-                bg="#E8A0A0",
-                activebackground="#D78484",
-                cursor="hand2",
+                width=76,
+                height=34,
+                corner_radius=9,
+                font=ctk.CTkFont(
+                    family="Segoe UI",
+                    size=12,
+                    weight="bold"
+                ),
+                fg_color=COLORS["delete"],
+                hover_color=COLORS["delete_hover"],
                 command=lambda task_index=index:
                 delete_archived_task(task_index)
             )
+
             delete_button.pack(
                 side="right",
-                padx=(5, 0)
+                padx=(5, 14),
+                pady=15
             )
 
-            restore_button = tk.Button(
-                task_row,
+            # Restore archived task
+            restore_button = ctk.CTkButton(
+                archived_card,
                 text="Restore",
-                font=("Arial", 9),
-                bg="#A8DDB5",
-                activebackground="#8FCCA0",
-                cursor="hand2",
+                width=82,
+                height=34,
+                corner_radius=9,
+                font=ctk.CTkFont(
+                    family="Segoe UI",
+                    size=12,
+                    weight="bold"
+                ),
+                fg_color=COLORS["success"],
+                hover_color=COLORS["success_hover"],
                 command=lambda task_index=index:
                 restore_task(task_index)
             )
+
             restore_button.pack(
                 side="right",
-                padx=(15, 0)
+                padx=5,
+                pady=15
             )
 
-    def update_task_completion(task_index, completed_variable):
+    def update_task_completion(
+            task_index,
+            completed_variable
+    ):
         """Save a task's updated checkbox state."""
 
-        tasks[task_index]["completed"] = completed_variable.get()
+        tasks[task_index]["completed"] = (
+            completed_variable.get()
+        )
+
         save_tasks(tasks)
+
+        # Refresh the page to update styling and totals
         show_active_tasks()
 
     def add_task():
@@ -220,9 +349,11 @@ def create_task_manager(parent, title_label):
             "What task would you like to add?"
         )
 
+        # Pressing cancel returns None
         if new_task:
             new_task = new_task.strip()
 
+            # Prevent empty or whitespace only tasks
             if new_task:
                 task = {
                     "text": new_task,
@@ -240,7 +371,7 @@ def create_task_manager(parent, title_label):
 
         confirmed = messagebox.askyesno(
             "Delete Task",
-            f'Are you sure you want to delete "{task_text}"?'
+            f'Are you sure you wan to delete "{task_text}"?'
         )
 
         if confirmed:
@@ -261,7 +392,7 @@ def create_task_manager(parent, title_label):
         show_active_tasks()
 
     def restore_task(task_index):
-        """Move an archived task back to the active task list."""
+        """Move an archived task back into the active task list."""
 
         task = archived_tasks.pop(task_index)
 
@@ -287,10 +418,10 @@ def create_task_manager(parent, title_label):
             save_archived_tasks(archived_tasks)
             show_archived_tasks()
 
-    # Display active tasks when the app starts
+    # Display active tasks when the application opens
     show_active_tasks()
 
-    # Return functions that app.py and sidebar.py can use
+    # Give app.py and sidebar.py access to these functions
     return {
         "add_task": add_task,
         "show_active_tasks": show_active_tasks,
