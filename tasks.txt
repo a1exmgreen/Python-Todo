@@ -1,4 +1,5 @@
 0|Finish to-do app
-0|Start working on the buy app
-0|Look at starting the CMP
 0|Add delete/edit option to this app
+0|Finish QA Tickets
+0|Look at the Job Prep
+0|Add Complet Removal to To-Do App

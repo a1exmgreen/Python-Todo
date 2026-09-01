@@ -6,8 +6,11 @@ from theme import COLORS
 def create_sidebar(
     parent,
     show_active_tasks=None,
+    show_completed_tasks=None,
     show_archived_tasks=None
 ):
+    """Create and display the application sidebar."""
+
     sidebar = ctk.CTkFrame(
         parent,
         width=210,
@@ -23,7 +26,7 @@ def create_sidebar(
     # Prevent the sidebar from shrinking to fit its contents
     sidebar.pack_propagate(False)
 
-    # App name
+    # Application name
     app_title = ctk.CTkLabel(
         sidebar,
         text="Task Manager",
@@ -41,7 +44,7 @@ def create_sidebar(
         pady=(30, 4)
     )
 
-    # Small description beneath the app name
+    # Description displayed beneath the application name
     app_subtitle = ctk.CTkLabel(
         sidebar,
         text="Organise your day",
@@ -58,7 +61,7 @@ def create_sidebar(
         pady=(0, 28)
     )
 
-    # Navigation heading
+    # Navigation section heading
     navigation_label = ctk.CTkLabel(
         sidebar,
         text="NAVIGATION",
@@ -80,9 +83,7 @@ def create_sidebar(
     navigation_buttons = {}
 
     def set_active_button(active_name):
-        """
-        Highlight the selected page and reset the other buttons.
-        """
+        """Highlight the selected page button."""
 
         for button_name, button in navigation_buttons.items():
             if button_name == active_name:
@@ -90,6 +91,7 @@ def create_sidebar(
                     fg_color=COLORS["sidebar_active"],
                     hover_color=COLORS["sidebar_active"]
                 )
+
             else:
                 button.configure(
                     fg_color="transparent",
@@ -97,21 +99,35 @@ def create_sidebar(
                 )
 
     def open_todo_page():
+        """Open the active Todo page."""
+
         set_active_button("Todo")
 
         if show_active_tasks:
             show_active_tasks()
 
+    def open_completed_page():
+        """Open the Completed page."""
+
+        set_active_button("Completed")
+
+        if show_completed_tasks:
+            show_completed_tasks()
+
     def open_archive_page():
+        """Open the Archive page."""
+
         set_active_button("Archive")
 
         if show_archived_tasks:
             show_archived_tasks()
 
     def unavailable_page(page_name):
+        """Highlight a page that has not been built yet."""
+
         set_active_button(page_name)
 
-    # Todo button
+    # Todo navigation button
     todo_button = ctk.CTkButton(
         sidebar,
         text="  Todo",
@@ -136,7 +152,7 @@ def create_sidebar(
 
     navigation_buttons["Todo"] = todo_button
 
-    # Routine button
+    # Routine navigation button
     routine_button = ctk.CTkButton(
         sidebar,
         text="  Routine",
@@ -160,7 +176,31 @@ def create_sidebar(
 
     navigation_buttons["Routine"] = routine_button
 
-    # Archive button
+    # Completed navigation button
+    completed_button = ctk.CTkButton(
+        sidebar,
+        text="  Completed",
+        anchor="w",
+        height=42,
+        corner_radius=10,
+        font=ctk.CTkFont(
+            family="Segoe UI",
+            size=14
+        ),
+        fg_color="transparent",
+        hover_color=COLORS["sidebar_hover"],
+        command=open_completed_page
+    )
+
+    completed_button.pack(
+        fill="x",
+        padx=15,
+        pady=4
+    )
+
+    navigation_buttons["Completed"] = completed_button
+
+    # Archive navigation button
     archive_button = ctk.CTkButton(
         sidebar,
         text="  Archive",
@@ -184,7 +224,7 @@ def create_sidebar(
 
     navigation_buttons["Archive"] = archive_button
 
-    # Settings button
+    # Settings navigation button
     settings_button = ctk.CTkButton(
         sidebar,
         text="  Settings",
@@ -216,7 +256,7 @@ def create_sidebar(
             family="Segoe UI",
             size=11
         ),
-        text_color="#6B7280"
+        text_color="#6b7280"
     )
 
     footer.pack(

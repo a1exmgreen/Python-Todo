@@ -83,6 +83,7 @@ add_task_button.pack(
 sidebar = create_sidebar(
     root,
     show_active_tasks=task_manager["show_active_tasks"],
+    show_completed_tasks=task_manager["show_completed_tasks"],
     show_archived_tasks=task_manager["show_archived_tasks"]
 )
 
