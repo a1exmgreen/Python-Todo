@@ -1,5 +1,5 @@
 0|Finish to-do app
 0|Add delete/edit option to this app
 0|Finish QA Tickets
-0|Look at the Job Prep
-0|Add Complet Removal to To-Do App
+0|Add more input options
+0|Upgrade from txt to db
