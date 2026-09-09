@@ -152,10 +152,10 @@ def create_sidebar(
 
     navigation_buttons["Todo"] = todo_button
 
-    # Routine navigation button
-    routine_button = ctk.CTkButton(
+    # Routine navigation button - Change this to Project
+    project_button = ctk.CTkButton(
         sidebar,
-        text="  Routine",
+        text="  Projects",
         anchor="w",
         height=42,
         corner_radius=10,
@@ -165,16 +165,16 @@ def create_sidebar(
         ),
         fg_color="transparent",
         hover_color=COLORS["sidebar_hover"],
-        command=lambda: unavailable_page("Routine")
+        command=lambda: unavailable_page("Projects")
     )
 
-    routine_button.pack(
+    project_button.pack(
         fill="x",
         padx=15,
         pady=4
     )
 
-    navigation_buttons["Routine"] = routine_button
+    navigation_buttons["Projects"] = project_button
 
     # Completed navigation button
     completed_button = ctk.CTkButton(

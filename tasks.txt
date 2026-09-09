@@ -1,4 +1,3 @@
-0|Finish to-do app
 0|Add delete/edit option to this app
 0|Finish QA Tickets
 0|Add more input options
